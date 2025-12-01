@@ -7,27 +7,17 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
-import java.util.List;
-
-public class InclusaoCozinhaMain {
+public class DeleteCozinhaMain {
     public static void main(String[] args) {
         ApplicationContext app = new SpringApplicationBuilder(JavanfoodApplication.class).web(WebApplicationType.NONE)
                 .run(args);
 
-        CozinhaRepositoryJpa cadastroCozinha = app.getBean(CozinhaRepositoryJpa.class);
+        CozinhaRepositoryJpa cozinhaRepositoryJpa = app.getBean(CozinhaRepositoryJpa.class);
 
-        Cozinha cozinha1 = new Cozinha();
-        cozinha1.setNome("testando");
-
-        Cozinha cozinha2 = new Cozinha();
-        cozinha2.setNome("japonesa");
-
-        Cozinha adicionar = cadastroCozinha.adicionar(cozinha1);
-        Cozinha adicionar1 = cadastroCozinha.adicionar(cozinha2);
+        Cozinha cozinha = new Cozinha();
+        cozinha.setId(1L);
 
 
-        System.out.println(adicionar.getId() + adicionar.getNome());
-
-
+        cozinhaRepositoryJpa.delete(cozinha);
     }
 }

@@ -1,7 +1,7 @@
-package com.javanfood.javanfood.jpa;
+package com.javanfood.javanfood.infraistructure.repository;
 
-import com.javanfood.javanfood.JavanfoodApplication;
 import com.javanfood.javanfood.domain.model.Cozinha;
+import com.javanfood.javanfood.repository.CozinhaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
@@ -11,31 +11,34 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Component
-public class CadastroCozinha {
+public class CozinhaRepositoryJpa implements CozinhaRepository {
 
-    private final JavanfoodApplication javanfoodApplication;
     @PersistenceContext
     private EntityManager entityManager;
 
-    CadastroCozinha(JavanfoodApplication javanfoodApplication) {
-        this.javanfoodApplication = javanfoodApplication;
-    }
-
+    @Override
     public List<Cozinha> listar() {
         TypedQuery<Cozinha> query = entityManager.createQuery("from Cozinha", Cozinha.class);
         return query.getResultList();
     }
+
     @Transactional
+    @Override
     public Cozinha adicionar(Cozinha cozinha) {
         return entityManager.merge(cozinha);
 
     }
 
     @Transactional
-    public Cozinha findById(Long id){
-        return entityManager.find(Cozinha.class,  id);
+    @Override
+    public void delete(Cozinha cozinha) {
+        cozinha = findById(cozinha.getId());
+        entityManager.remove(cozinha);
     }
-//    @Transactional
-//    public Cozinha delete(Long id) {
-//    }
+
+    @Transactional
+    @Override
+    public Cozinha findById(Long id) {
+        return entityManager.find(Cozinha.class, id);
+    }
 }
