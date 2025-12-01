@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import java.util.Objects;
 
 @Entity
-
 public class Cozinha {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
