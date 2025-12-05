@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.controlers;
+package com.javanfood.javanfood.api.controlers;
 
 import com.javanfood.javanfood.domain.model.Endereco;
 import com.javanfood.javanfood.repository.EnderecoRespository;
