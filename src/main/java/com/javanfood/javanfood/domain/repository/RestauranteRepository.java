@@ -1,4 +1,4 @@
-package com.javanfood.javanfood.repository;
+package com.javanfood.javanfood.domain.repository;
 
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;

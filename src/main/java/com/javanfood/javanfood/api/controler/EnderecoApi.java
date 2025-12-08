@@ -1,7 +1,7 @@
-package com.javanfood.javanfood.api.controlers;
+package com.javanfood.javanfood.api.controler;
 
 import com.javanfood.javanfood.domain.model.Endereco;
-import com.javanfood.javanfood.repository.EnderecoRespository;
+import com.javanfood.javanfood.domain.repository.EnderecoRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

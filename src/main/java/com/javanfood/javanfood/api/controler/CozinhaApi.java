@@ -1,9 +1,10 @@
-package com.javanfood.javanfood.api.controlers;
+package com.javanfood.javanfood.api.controler;
 
 
 import com.javanfood.javanfood.api.model.CozinhaXml;
+import com.javanfood.javanfood.api.service.CadastroCozinhaService;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.repository.CozinhaRepository;
+import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,6 +21,9 @@ public class CozinhaApi {
 
     @Autowired
     private CozinhaRepository cozinhaRepository;
+
+    @Autowired
+    private CadastroCozinhaService cadastroCozinhaService;
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,7 +51,7 @@ public class CozinhaApi {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
-        return cozinhaRepository.adicionar(cozinha);
+        return cadastroCozinhaService.salvar(cozinha);
     }
 
     @PutMapping("/{cozinha_id}")

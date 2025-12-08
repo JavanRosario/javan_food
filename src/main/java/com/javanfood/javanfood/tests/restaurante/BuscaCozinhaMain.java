@@ -1,10 +1,8 @@
 package com.javanfood.javanfood.tests.restaurante;
 
 import com.javanfood.javanfood.JavanfoodApplication;
-import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
-import com.javanfood.javanfood.infraistructure.repository.CozinhaRepositoryJpa;
-import com.javanfood.javanfood.repository.RestauranteRepository;
+import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;

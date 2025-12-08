@@ -1,7 +1,7 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
 import com.javanfood.javanfood.domain.model.Permisao;
-import com.javanfood.javanfood.repository.PermisaoRepository;
+import com.javanfood.javanfood.domain.repository.PermisaoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
