@@ -1,16 +1,17 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
-import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.api.repository.CozinhaRepository;
+import com.javanfood.javanfood.domain.model.Cozinha;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
- @Component
+@Component
 public class CozinhaRepositoryJpa implements CozinhaRepository {
 
     @PersistenceContext
@@ -32,8 +33,11 @@ public class CozinhaRepositoryJpa implements CozinhaRepository {
 
     @Transactional
     @Override
-    public void delete(Cozinha cozinha) {
-        cozinha = findById(cozinha.getId());
+    public void delete(Long id) {
+        Cozinha cozinha = findById(id);
+        if (cozinha == null) {
+            throw new EmptyResultDataAccessException(1);
+        }
         entityManager.remove(cozinha);
     }
 
