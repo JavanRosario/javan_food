@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-//@JsonRootName("gastronomia")
+
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -16,8 +16,7 @@ public class Cozinha {
 	private Long id;
 
 
-//    @JsonIgnore
-//    @JsonProperty("Título")
+
     @Column(nullable = false)
 	private String nome;
 
