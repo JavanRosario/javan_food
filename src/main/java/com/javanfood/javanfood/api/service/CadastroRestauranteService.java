@@ -1,9 +1,11 @@
 package com.javanfood.javanfood.api.service;
 
 import com.javanfood.javanfood.api.repository.CozinhaRepository;
+import com.javanfood.javanfood.api.repository.PagamentoRepository;
 import com.javanfood.javanfood.api.repository.RestauranteRepository;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
+import com.javanfood.javanfood.domain.model.FormaPagamento;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,18 +19,30 @@ public class CadastroRestauranteService {
     @Autowired
     CozinhaRepository cozinhaRepository;
 
+    @Autowired
+    PagamentoRepository pagamentoRepository;
+
     public Restaurante salvar(Restaurante restaurante) {
         Long cozinhaId = restaurante.getCozinha().getId();
         Cozinha cozinha = cozinhaRepository.findById(cozinhaId);
+
+        Long pagamentoId = restaurante.getFormaPagamento().getId();
+        FormaPagamento formaPagamento = pagamentoRepository.findById(pagamentoId);
 
         if (cozinha == null) {
             throw new EntidadeNaoEncontradaExeption(
                     String.format("Não existe cadastro de cozinha com código %d", cozinhaId));
         }
 
-        restaurante.setCozinha(cozinha);
+        if (formaPagamento == null) {
+            throw new EntidadeNaoEncontradaExeption(
+                    String.format("Não existe cadastro de cozinha com código %d", pagamentoId));
+        }
 
+
+        restaurante.setCozinha(cozinha);
+        restaurante.setFormaPagamento(formaPagamento);
         return restauranteRepository.adicionar(restaurante);
-    }   
+    }
 }
 
