@@ -17,14 +17,12 @@ public class EnderecoRepositoryJpa implements EnderecoRespository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Endereco> listar() {
         TypedQuery<Endereco> query = entityManager.createQuery("from Endereco", Endereco.class);
         return query.getResultList();
     }
 
     @Override
-    @Transactional
     public Endereco findById(Long id) {
         return entityManager.find(Endereco.class, id);
     }

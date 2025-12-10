@@ -23,13 +23,11 @@ public class PagamentoRepositoryJpa implements PagamentoRepository {
     }
 
     @Override
-    @Transactional
     public FormaPagamento findById(Long id) {
         return entityManager.find(FormaPagamento.class, id);
     }
 
     @Override
-    @Transactional
     public List<FormaPagamento> listar() {
         TypedQuery<FormaPagamento> query = entityManager
                 .createQuery("from forma_pagamento", FormaPagamento.class);
@@ -37,6 +35,7 @@ public class PagamentoRepositoryJpa implements PagamentoRepository {
     }
 
     @Override
+    @Transactional
     public void delete(FormaPagamento pagamento) {
         pagamento = findById(pagamento.getId());
         entityManager.remove(pagamento);

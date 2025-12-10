@@ -17,7 +17,6 @@ public class PermicaoRepositoryJpa implements PermisaoRepository {
     EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Permisao> listar() {
         TypedQuery<Permisao> query = entityManager.createQuery("from permicao", Permisao.class);
         return query.getResultList();
@@ -29,11 +28,13 @@ public class PermicaoRepositoryJpa implements PermisaoRepository {
     }
 
     @Override
+    @Transactional
     public Permisao adicionar(Permisao permisao) {
         return entityManager.merge(permisao);
     }
 
     @Override
+    @Transactional
     public void delete(Permisao permisao) {
         permisao = findById(permisao.getId());
         entityManager.remove(permisao);

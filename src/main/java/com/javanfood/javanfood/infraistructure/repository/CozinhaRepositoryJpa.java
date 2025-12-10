@@ -18,7 +18,6 @@ public class CozinhaRepositoryJpa implements CozinhaRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Cozinha> listar() {
         TypedQuery<Cozinha> query = entityManager.createQuery("from Cozinha", Cozinha.class);
         return query.getResultList();
@@ -41,7 +40,6 @@ public class CozinhaRepositoryJpa implements CozinhaRepository {
         entityManager.remove(cozinha);
     }
 
-    @Transactional
     @Override
     public Cozinha findById(Long id) {
         return entityManager.find(Cozinha.class, id);

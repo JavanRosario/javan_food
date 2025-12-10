@@ -17,14 +17,12 @@ public class CidadeRepositoryJpa implements CidadeRepository {
     private EntityManager entityManager;
 
     @Override
-    @Transactional
     public List<Cidade> listar() {
         TypedQuery<Cidade> query = entityManager.createQuery("from cidade", Cidade.class);
         return query.getResultList();
     }
 
     @Override
-    @Transactional
     public Cidade findById(Long id) {
         return entityManager.find(Cidade.class, id);
     }
