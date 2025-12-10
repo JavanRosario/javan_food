@@ -24,9 +24,6 @@ public class RestauranteControler {
     @Autowired
     CadastroRestauranteService cadastroRestauranteService;
 
-    @Autowired
-    PagamentoRepository pagamentoRepository;
-
     @GetMapping
     public List<Restaurante> listar() {
         return restauranteRepository.listar();
