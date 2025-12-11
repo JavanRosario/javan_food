@@ -12,5 +12,5 @@ public interface EnderecoRespository {
 
     Endereco adicionar(Endereco endereco);
 
-    void delete(Endereco endereco);
+    void delete(Long id);
 }
