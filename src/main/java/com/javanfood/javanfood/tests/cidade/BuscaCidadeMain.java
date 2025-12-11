@@ -17,6 +17,6 @@ public class BuscaCidadeMain {
         Cidade cidade = bean.findById(1L);
 
         System.out.println("====================================");
-        System.out.println(cidade.getNome()+" " + cidade.getEndereco().getNome());
+        System.out.println(cidade.getNome()+" " + cidade.getEstado().getNome());
     }
 }
