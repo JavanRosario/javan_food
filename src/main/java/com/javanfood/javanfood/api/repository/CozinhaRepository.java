@@ -1,16 +1,14 @@
 package com.javanfood.javanfood.api.repository;
 
 import com.javanfood.javanfood.domain.model.Cozinha;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface CozinhaRepository extends JpaRepository<Cozinha, Long> {
 
-public interface CozinhaRepository {
-    List<Cozinha> listar();
+//    List<Cozinha> consultaNome(String nome);
 
-    Cozinha findById(Long id);
 
-    Cozinha adicionar(Cozinha cozinha);
-
-    void delete(Long id);
 }
 

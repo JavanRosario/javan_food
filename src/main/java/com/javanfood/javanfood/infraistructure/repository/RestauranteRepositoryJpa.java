@@ -1,15 +1,16 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
-import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.api.repository.RestauranteRepository;
+import com.javanfood.javanfood.domain.model.Restaurante;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-@Component
+
+@Repository
 public class RestauranteRepositoryJpa implements RestauranteRepository {
 
     @PersistenceContext

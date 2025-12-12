@@ -30,17 +30,17 @@ public class CozinhaControler {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Cozinha> listar() {
         System.out.println("LISTAR 1");
-        return cozinhaRepository.listar();
+        return cozinhaRepository.findAll();
     }
 
     @GetMapping(produces = MediaType.APPLICATION_XML_VALUE)
     public CozinhaXml listarXml() {
-        return new CozinhaXml(cozinhaRepository.listar());
+        return new CozinhaXml(cozinhaRepository.findAll());
     }
 
     @GetMapping("/{cozinha_id}")
     public ResponseEntity<Cozinha> listarId(@PathVariable Long cozinha_id) {
-        Cozinha cozinha = cozinhaRepository.findById(cozinha_id);
+        Cozinha cozinha = cozinhaRepository.findAllById(cozinha_id);
 
         if (cozinha != null) {
             return ResponseEntity.ok(cozinha);
