@@ -1,17 +1,17 @@
 package com.javanfood.javanfood.infraistructure.repository;
 
-import com.javanfood.javanfood.domain.model.Estado;
 import com.javanfood.javanfood.api.repository.EstadoRespository;
+import com.javanfood.javanfood.domain.model.Estado;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Component
+@Repository
 public class EstadoRepositoryJpa implements EstadoRespository {
 
     @PersistenceContext
