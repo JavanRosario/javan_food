@@ -16,8 +16,8 @@ public class TesteControler {
     @Autowired
     public CozinhaRepository cozinhaRepository;
 
-    @GetMapping("/cozinhas/por-nome")
-    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
-        return cozinhaRepository.consultaNome(nome);
-    }
-}
+//    @GetMapping("/cozinhas/por-nome")
+//    public List<Cozinha> cozinhasPorNome(@RequestParam("nome") String nome) {
+//        return cozinhaRepository.consultaNome(nome);
+//    }
+//}
