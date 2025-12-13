@@ -1,15 +1,10 @@
 package com.javanfood.javanfood.api.repository;
 
 import com.javanfood.javanfood.domain.model.FormaPagamento;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface PagamentoRepository extends JpaRepository<FormaPagamento, Long> {
 
-public interface PagamentoRepository {
-    List<FormaPagamento> listar();
-
-    FormaPagamento findById(Long id);
-
-    FormaPagamento adicionar(FormaPagamento pagamento);
-
-    void delete(FormaPagamento pagamento);
 }

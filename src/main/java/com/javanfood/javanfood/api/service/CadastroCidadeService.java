@@ -19,20 +19,19 @@ public class CadastroCidadeService {
     EstadoRespository estadoRespository;
 
     public Cidade salvar(Cidade cidade) {
-        Long enderecoId = cidade.getEstado().getId();
-        Estado estado = estadoRespository.findById(enderecoId);
-
-        if (estado == null) {
-            throw new EntidadeNaoEncontradaExeption("Não existe cadastro de endereço com código: " + enderecoId);
-        }
+        Long estadoId = cidade.getEstado().getId();
+        Estado estado = estadoRespository.findById(estadoId)
+                .orElseThrow(() -> new EntidadeNaoEncontradaExeption(
+                        String.format("Não existe cadastro de Estado com código %d", estadoId))
+                );
 
         cidade.setEstado(estado);
-        return cidadeRepository.adicionar(cidade);
+        return cidadeRepository.save(cidade);
     }
 
     public void excluir(Long cidadeId) {
         try {
-            cidadeRepository.delete(cidadeId);
+            cidadeRepository.deleteById(cidadeId);
         } catch (EmptyResultDataAccessException e) {
             throw new EntidadeNaoEncontradaExeption("Não existe cadastro de Cidade com esse código: " + cidadeId);
         } catch (DataIntegrityViolationException e) {

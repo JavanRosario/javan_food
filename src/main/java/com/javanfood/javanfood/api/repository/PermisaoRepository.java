@@ -1,15 +1,9 @@
 package com.javanfood.javanfood.api.repository;
 
 import com.javanfood.javanfood.domain.model.Permisao;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface PermisaoRepository {
-    List<Permisao> listar();
-
-    Permisao findById(Long id);
-
-    Permisao adicionar(Permisao permisao);
-
-    void delete(Permisao permisao);
+@Repository
+public interface PermisaoRepository extends JpaRepository<Permisao, Long> {
 }

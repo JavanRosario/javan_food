@@ -1,15 +1,10 @@
 package com.javanfood.javanfood.api.repository;
 
 import com.javanfood.javanfood.domain.model.Estado;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+@Repository
+public interface EstadoRespository extends JpaRepository<Estado, Long> {
 
-public interface EstadoRespository {
-    List<Estado> listar();
-
-    Estado findById(Long id);
-
-    Estado adicionar(Estado estado);
-
-    void delete(Long id);
 }

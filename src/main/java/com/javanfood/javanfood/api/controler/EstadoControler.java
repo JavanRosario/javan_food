@@ -12,10 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/enderecos")
-public class EnderecoControler {
+public class EstadoControler {
 
     @Autowired
     private EstadoRespository estadoRespository;
@@ -25,15 +26,15 @@ public class EnderecoControler {
 
     @GetMapping
     public List<Estado> listar() {
-        return estadoRespository.listar();
+        return estadoRespository.findAll();
     }
 
     @GetMapping("/{enderecoId}")
     public ResponseEntity<Estado> listarid(@PathVariable Long enderecoId) {
-        Estado estado = estadoRespository.findById(enderecoId);
+        Optional<Estado> estado = estadoRespository.findById(enderecoId);
 
-        if (estado != null) {
-            return ResponseEntity.ok(estado);
+        if (estado.isPresent()) {
+            return ResponseEntity.ok(estado.get());
         }
 
         return ResponseEntity.notFound().build();
@@ -41,30 +42,33 @@ public class EnderecoControler {
 
     @PostMapping
     public ResponseEntity<?> adicionar(@RequestBody Estado estado) {
+
         try {
-            estado = cadastroEstadoService.salvar(estado);
-            return ResponseEntity.status(HttpStatus.CREATED).body(estado);
+            Estado estadoAtual = cadastroEstadoService.salvar(estado);
+            return ResponseEntity.status(HttpStatus.CREATED).body(estadoAtual);
         } catch (EntidadeNaoEncontradaExeption e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
 
     @PutMapping("/{enderecoId}")
     public ResponseEntity<?> atualizar(@PathVariable Long enderecoId, @RequestBody Estado estado) {
         try {
-            Estado estadoAtual = estadoRespository.findById(enderecoId);
+            Optional<Estado> estadoAtual = estadoRespository.findById(enderecoId);
 
-            if (estadoAtual != null) {
-                BeanUtils.copyProperties(estado, estadoAtual, "id");
-                estadoAtual = cadastroEstadoService.salvar(estadoAtual);
+            if (estadoAtual.isPresent()) {
+                BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
+                Estado estadoSalvo = cadastroEstadoService.salvar(estadoAtual.get());
 
-                return ResponseEntity.ok(estadoAtual);
+                return ResponseEntity.ok(estadoSalvo);
             }
 
             return ResponseEntity.notFound().build();
         } catch (EntidadeNaoEncontradaExeption e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+
     }
 
     @DeleteMapping("/{enderecoId}")
