@@ -10,8 +10,10 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -30,13 +32,21 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
         CriteriaQuery<Restaurante> criteriaQuery = builder.createQuery(Restaurante.class);
         Root<Restaurante> root = criteriaQuery.from(Restaurante.class);
 
+        List<Predicate> predicates = new ArrayList<>();
 
-        Predicate nomePredicate = builder.like(root.get("nome"), "%" + nome + "%");
-        Predicate taxaMenorOuIgual = builder.greaterThanOrEqualTo(root.get("taxa_frete"), txFreteInicial);
-        Predicate taxaMenorOuIgual2 = builder.greaterThanOrEqualTo(root.get("taxa_frete"), txFreteFinal);
+        if (StringUtils.hasText(nome)) {
+            Predicate nomePredicate = builder.like(root.get("nome"), "%" + nome + "%");
+        }
+        if (txFreteInicial != null) {
+            Predicate taxaMenorOuIgual = builder.greaterThanOrEqualTo(root.get("taxaFrete"), txFreteInicial);
+        }
+
+        if (txFreteFinal != null) {
+            Predicate taxaMenorOuIgual2 = builder.greaterThanOrEqualTo(root.get("taxaFrete"), txFreteFinal);
+        }
 
 
-        criteriaQuery.where(taxaMenorOuIgual,taxaMenorOuIgual2);
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
 
         TypedQuery<Restaurante> query = entityManager.createQuery(criteriaQuery);
 

@@ -1,5 +1,7 @@
 package com.javanfood.javanfood.api.controler;
 
+import com.javanfood.javanfood.domain.customRepository.spec.RestauranteComFreteGratisSpec;
+import com.javanfood.javanfood.domain.customRepository.spec.RestauranteComNomeSemelhanteSpec;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.model.Restaurante;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
@@ -73,6 +75,16 @@ public class TesteControler {
                                                       @RequestParam BigDecimal txFreteInicial,
                                                       @RequestParam BigDecimal txFreteFinal) {
         return restauranteRepository.find(nome, txFreteInicial, txFreteFinal);
+
+    }
+
+    @GetMapping("restaurantes/com-frete-gratis")
+    public List<Restaurante> restaurantesPorNomeFrete(String nome) {
+
+        RestauranteComFreteGratisSpec spec = new RestauranteComFreteGratisSpec();
+        RestauranteComNomeSemelhanteSpec spec1 = new RestauranteComNomeSemelhanteSpec(nome);
+
+        return restauranteRepository.findAll(spec.and(spec1));
 
     }
 
