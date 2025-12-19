@@ -28,14 +28,14 @@ public class CadastroRestauranteService {
                 .orElseThrow(() -> new EntidadeNaoEncontradaExeption(
                         String.format("Não existe cadastro de cozinha com código %d", cozinhaId)));
 
-        Long pagamentoId = restaurante.getFormaPagamento().getId();
-        FormaPagamento formaPagamento = pagamentoRepository.findById(pagamentoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaExeption(
-                        String.format("Não existe cadastro de pagamento com código: %d", pagamentoId)));
+//        Long pagamentoId = restaurante.getFormaPagamento().getId();
+//        FormaPagamento formaPagamento = pagamentoRepository.findById(pagamentoId)
+//                .orElseThrow(() -> new EntidadeNaoEncontradaExeption(
+//                        String.format("Não existe cadastro de pagamento com código: %d", pagamentoId)));
 
 
         restaurante.setCozinha(cozinha);
-        restaurante.setFormaPagamento(formaPagamento);
+//        restaurante.setFormaPagamento(formaPagamento);
         return restauranteRepository.save(restaurante);
     }
 }
