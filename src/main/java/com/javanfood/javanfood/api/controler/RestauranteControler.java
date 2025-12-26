@@ -29,7 +29,7 @@ public class RestauranteControler {
 
 	@GetMapping
 	public List<Restaurante> listar() {
-		return restauranteRepository.findAll();
+		return restauranteRepository.findAllWithCozinhaFormaPagamentoList();
 	}
 
 	@GetMapping("/{restauranteId}")
