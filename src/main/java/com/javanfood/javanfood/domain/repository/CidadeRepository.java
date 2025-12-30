@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CidadeRepository extends JpaRepository<Cidade, Long> {
  public static final List<Cidade> findByNameCidades = null;
+ public static final List<Cidade> findByNameCidades2 = null;
 }
