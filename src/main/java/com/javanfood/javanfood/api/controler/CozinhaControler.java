@@ -24,18 +24,11 @@ import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
 @RequestMapping("/cozinhas")
 public class CozinhaControler {
 
-		private final RestauranteControler restauranteControler;
-	
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
 	@Autowired
 	private CadastroCozinhaService cadastroCozinhaService;
-
-
-	CozinhaControler(RestauranteControler restauranteControler) {
-		this.restauranteControler = restauranteControler;
-	}
 
 
 	@GetMapping
@@ -44,8 +37,8 @@ public class CozinhaControler {
 	}
 
 	@GetMapping("/{cozinha_id}")
-	public void listarId(@PathVariable Long cozinha_id) {
-		cadastroCozinhaService.buscarOuFalha(cozinha_id);
+	public Cozinha listarId(@PathVariable Long cozinha_id) {
+		return cadastroCozinhaService.buscarOuFalha(cozinha_id);
 	}
 
 	@PostMapping

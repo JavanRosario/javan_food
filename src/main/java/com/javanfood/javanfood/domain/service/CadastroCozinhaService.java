@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
 import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
 import com.javanfood.javanfood.domain.model.Cozinha;
-import com.javanfood.javanfood.domain.repository.CidadeRepository;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 
 @Service
@@ -17,13 +16,14 @@ public class CadastroCozinhaService {
 
 	private static final String MSG_NAO_ENCONTRADO = "Não existe cadastro de cozinha com código: ";
 
-	private final CidadeRepository cidadeRepository;
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
 
-	CadastroCozinhaService(CidadeRepository cidadeRepository) {
-		this.cidadeRepository = cidadeRepository;
+
+	public Cozinha buscarOuFalha(Long cozinha_id) {
+		return cozinhaRepository.findById(cozinha_id)
+				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(String.format(MSG_NAO_ENCONTRADO, cozinha_id)));
 	}
 
 	public Cozinha salvar(Cozinha cozinha) {
@@ -39,6 +39,7 @@ public class CadastroCozinhaService {
 		try {
 			cozinhaRepository.deleteById(cozinhaId);
 			cozinhaRepository.flush();
+			
 		} catch (DataIntegrityViolationException e) {
 			throw new EntidadeEmUsoExeption(
 					String.format(MSG_ENTIDADE_EM_USO, cozinhaId));
@@ -46,9 +47,5 @@ public class CadastroCozinhaService {
 
 	}
 
-	public Cozinha buscarOuFalha(Long cozinha_id) {
-		return cozinhaRepository.findById(cozinha_id)
-				.orElseThrow(() -> new EntidadeNaoEncontradaExeption(
-						MSG_NAO_ENCONTRADO + cozinha_id));
-	}
+
 }

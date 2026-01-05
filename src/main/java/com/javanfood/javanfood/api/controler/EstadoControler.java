@@ -1,88 +1,62 @@
 package com.javanfood.javanfood.api.controler;
 
-import com.javanfood.javanfood.domain.repository.EstadoRespository;
-import com.javanfood.javanfood.domain.service.CadastroEstadoService;
-import com.javanfood.javanfood.domain.exeption.EntidadeEmUsoExeption;
-import com.javanfood.javanfood.domain.exeption.EntidadeNaoEncontradaExeption;
-import com.javanfood.javanfood.domain.model.Estado;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.Optional;
+import com.javanfood.javanfood.domain.model.Estado;
+import com.javanfood.javanfood.domain.repository.EstadoRespository;
+import com.javanfood.javanfood.domain.service.CadastroEstadoService;
 
 @RestController
 @RequestMapping("/enderecos")
 public class EstadoControler {
 
-    @Autowired
-    private EstadoRespository estadoRespository;
+	@Autowired
+	private EstadoRespository estadoRespository;
 
-    @Autowired
-    private CadastroEstadoService cadastroEstadoService;
+	@Autowired
+	private CadastroEstadoService cadastroEstadoService;
 
-    @GetMapping
-    public List<Estado> listar() {
-        return estadoRespository.findAll();
-    }
+	@GetMapping
+	public List<Estado> listar() {
+		return estadoRespository.findAll();
+	}
 
-    @GetMapping("/{enderecoId}")
-    public ResponseEntity<Estado> listarid(@PathVariable Long enderecoId) {
-        Optional<Estado> estado = estadoRespository.findById(enderecoId);
+	@GetMapping("/{estadoId}")
+	public Estado listarid(@PathVariable Long estadoId) {
+		return cadastroEstadoService.buscaOuFalha(estadoId);
+	}
 
-        if (estado.isPresent()) {
-            return ResponseEntity.ok(estado.get());
-        }
+	@PostMapping
+	public Estado adicionar(@RequestBody Estado estado) {
+		return cadastroEstadoService.salvar(estado);
 
-        return ResponseEntity.notFound().build();
-    }
+	}
 
-    @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Estado estado) {
+	@PutMapping("/{enderecoId}")
+	public Estado atualizar(@PathVariable Long enderecoId, @RequestBody Estado estado) {
+		
+		Estado estadoAtual = cadastroEstadoService.buscaOuFalha(enderecoId);
+		BeanUtils.copyProperties(estado, estadoAtual, "id");
+		return cadastroEstadoService.salvar(estadoAtual);
+	}
 
-        try {
-            Estado estadoAtual = cadastroEstadoService.salvar(estado);
-            return ResponseEntity.status(HttpStatus.CREATED).body(estadoAtual);
-        } catch (EntidadeNaoEncontradaExeption e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
-
-    @PutMapping("/{enderecoId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long enderecoId, @RequestBody Estado estado) {
-        try {
-            Optional<Estado> estadoAtual = estadoRespository.findById(enderecoId);
-
-            if (estadoAtual.isPresent()) {
-                BeanUtils.copyProperties(estado, estadoAtual.get(), "id");
-                Estado estadoSalvo = cadastroEstadoService.salvar(estadoAtual.get());
-
-                return ResponseEntity.ok(estadoSalvo);
-            }
-
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeNaoEncontradaExeption e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-    }
-
-    @DeleteMapping("/{enderecoId}")
-    public ResponseEntity<?> delete(@PathVariable Long enderecoId) {
-
-        try {
-            cadastroEstadoService.excluir(enderecoId);
-            return ResponseEntity.noContent().build();
-        } catch (EntidadeNaoEncontradaExeption e) {
-            return ResponseEntity.notFound().build();
-        } catch (EntidadeEmUsoExeption e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-        }
-
-    }
+	@DeleteMapping("/{enderecoId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable Long enderecoId) {
+		cadastroEstadoService.excluir(enderecoId);
+	}
 
 }
