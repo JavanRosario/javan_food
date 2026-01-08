@@ -19,31 +19,19 @@ import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(EntidadeNaoEncontradaExeption.class)
-	public ResponseEntity<?> tratarEstadoNaoEncontradoExeption(EntidadeNaoEncontradaExeption e) {
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problema);
+	public ResponseEntity<?> tratarEstadoNaoEncontradoExeption(EntidadeNaoEncontradaExeption e, WebRequest request) {
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 
 	@ExceptionHandler(NegocioExeption.class)
-	public ResponseEntity<?> tratarNegocio(NegocioExeption e) {
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
+	public ResponseEntity<?> tratarNegocio(NegocioExeption e, WebRequest request) {
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
 	}
 
 
 	@ExceptionHandler(EntidadeEmUsoExeption.class)
-	public ResponseEntity<?> tratarEntidadeEmUsoExeption(EntidadeEmUsoExeption e) {
-		Problema problema = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(e.getMessage())
-				.build();
-		return ResponseEntity.status(HttpStatus.CONFLICT).body(problema);
+	public ResponseEntity<?> tratarEntidadeEmUsoExeption(EntidadeEmUsoExeption e, WebRequest request) {
+		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}
 
 	@Override
@@ -53,10 +41,19 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers,
 			HttpStatusCode statusCode,
 			WebRequest request) {
-		body = Problema.builder()
-				.dataHora(LocalDateTime.now())
-				.menssagem(ex.getMessage())
-				.build();
+
+		if (body == null) {
+			body = Problema.builder()
+					.dataHora(LocalDateTime.now())
+					.menssagem(HttpStatus.valueOf(statusCode.value()).getReasonPhrase())
+					.build();
+		} else if (body instanceof String) {
+			body = Problema.builder()
+					.dataHora(LocalDateTime.now())
+					.menssagem(ex.getMessage())
+					.build();
+		}
+
 		return super.handleExceptionInternal(ex, body, headers, statusCode, request);
 	}
 
