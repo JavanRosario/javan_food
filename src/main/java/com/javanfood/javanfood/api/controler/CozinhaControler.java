@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.javanfood.javanfood.domain.model.Cozinha;
 import com.javanfood.javanfood.domain.repository.CozinhaRepository;
 import com.javanfood.javanfood.domain.service.CadastroCozinhaService;
