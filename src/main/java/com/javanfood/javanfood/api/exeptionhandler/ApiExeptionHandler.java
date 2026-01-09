@@ -1,7 +1,5 @@
 package com.javanfood.javanfood.api.exeptionhandler;
 
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -43,14 +41,14 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 
 		if (body == null) {
-			body = Problema.builder()
-					.dataHora(LocalDateTime.now())
-					.menssagem(HttpStatus.valueOf(statusCode.value()).getReasonPhrase())
+			body = Problem.builder()
+					.title(ex.getMessage())
+					.status(statusCode.value())
 					.build();
 		} else if (body instanceof String) {
-			body = Problema.builder()
-					.dataHora(LocalDateTime.now())
-					.menssagem(ex.getMessage())
+			body = Problem.builder()
+					.title(ex.getMessage())
+					.status(statusCode.value())
 					.build();
 		}
 
