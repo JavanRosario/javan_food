@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -16,6 +17,7 @@ import com.javanfood.javanfood.domain.exeption.NegocioExeption;
 @ControllerAdvice
 public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
+
 	@ExceptionHandler(EntidadeNaoEncontradaExeption.class)
 	public ResponseEntity<?> handleEntidadeNaoEncontradoExeption(EntidadeNaoEncontradaExeption e, WebRequest request) {
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -27,16 +29,31 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 
-	@ExceptionHandler(NegocioExeption.class)
-	public ResponseEntity<?> handleNegocioException(NegocioExeption e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
-	}
-
-
 	@ExceptionHandler(EntidadeEmUsoExeption.class)
 	public ResponseEntity<?> handleEntidadeEmUsoExeption(EntidadeEmUsoExeption e, WebRequest request) {
-		return handleExceptionInternal(e, e.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
+		HttpStatus status = HttpStatus.CONFLICT;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
+
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
+
+
+	@ExceptionHandler(NegocioExeption.class)
+	public ResponseEntity<?> handleNegocioException(NegocioExeption e, WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		String detail = e.getMessage();
+		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
+
+		Problem problem = createProblemBuilder(status, problemType, detail).build();
+
+		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
+
+	}
+
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(
@@ -48,7 +65,7 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 
 		if (body == null) {
 			body = Problem.builder()
-					.title(ex.getMessage())	
+					.title(ex.getMessage())
 					.status(statusCode.value())
 					.build();
 		} else if (body instanceof String) {
@@ -59,6 +76,22 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		}
 
 		return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+	}
+
+
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(
+			HttpMessageNotReadableException ex,
+			HttpHeaders headers,
+			HttpStatusCode status,
+			WebRequest request) {
+
+		String detail = "O corpo da requisição está inválido. Verifique erro na sintaxe";
+		ProblemType problemType = ProblemType.CORPO_INCOMPREENSIVEL;
+		HttpStatus statusHttp = HttpStatus.BAD_REQUEST;
+		Problem problem = createProblemBuilder(statusHttp, problemType, detail).build();
+
+		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
 	}
 
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
