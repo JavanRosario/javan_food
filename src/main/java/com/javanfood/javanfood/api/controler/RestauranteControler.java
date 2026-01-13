@@ -30,6 +30,7 @@ import com.javanfood.javanfood.domain.repository.RestauranteRepository;
 import com.javanfood.javanfood.domain.service.CadastroRestauranteService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/restaurantes")
@@ -53,7 +54,7 @@ public class RestauranteControler {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar(@RequestBody Restaurante restaurante) {
+	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
 		try {
 			return cadastroRestauranteService.salvar(restaurante);
 		} catch (CozinhaNaoEncontradoExeption e) {
