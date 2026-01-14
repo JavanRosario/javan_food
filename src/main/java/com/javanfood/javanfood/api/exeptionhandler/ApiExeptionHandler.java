@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,18 +39,9 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		HttpStatus httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
 		ProblemType problemType = ProblemType.ERRO_NO_SISTEMA;
-		Problem problem = createProblemBuilder(httpStatus, problemType, MSG_ERRO_GENERICA).userMessage(MSG_ERRO_GENERICA).build();
+		Problem problem = createProblemBuilder(httpStatus, problemType, MSG_ERRO_GENERICA)
+				.userMessage(MSG_ERRO_GENERICA).build();
 		return handleExceptionInternal(e, problem, new HttpHeaders(), httpStatus, webRequest);
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(
-			MethodArgumentNotValidException ex,
-			HttpHeaders headers,
-			HttpStatusCode status,
-			WebRequest request) {
-		System.out.println("peguei esse fdp aqui mano");
-		return super.handleMethodArgumentNotValid(ex, headers, status, request);
 	}
 
 
@@ -171,6 +163,33 @@ public class ApiExeptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problem, headers, httpStatus, request);
 	}
 
+
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex,
+			HttpHeaders headers,
+			HttpStatusCode status,
+			WebRequest request) {
+		BindingResult bindingResult = ex.getBindingResult();
+
+		List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
+				.map(fieldError -> Problem.Field.builder()
+						.name(fieldError.getField())
+						.userMessage(fieldError.getDefaultMessage())
+						.build())
+				.collect(Collectors.toList());
+
+		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+
+		String detail = "Um ou mais campos estão inválidos, Faça o preenchimento correto e tente novamente";
+
+		Problem problem = createProblemBuilder(httpStatus, problemType, detail).fields(problemFields)
+				.userMessage(detail).build();
+
+		return super.handleExceptionInternal(ex, problem, headers, httpStatus, request);
+	}
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(
